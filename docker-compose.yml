@@ -2,26 +2,39 @@ version: "2"
 services:
   nginx:
     image: nginx:1.10.0
-    ports:
-      - "80:80"
-      - "443:443"
+    expose:
+      - "80"
     volumes:
       - ./wordpress:/var/www/html
       - ./nginx/log:/var/log/nginx
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
     environment:
-      - WORDPRESS_DB_PASSWORD=your_password
+      - VIRTUAL_HOST=example.nl
+      - LETSENCRYPT_HOST=example.nl
+      - LETSENCRYPT_EMAIL=email
     links:
       - wordpress:php
+    networks:
+      service-proxy:
+        aliases:
+          - wordpress1_nginx
 
   wordpress:
     image: wordpress:4.5.2-fpm
+    expose:
+      - 9000
     volumes:
       - ./wordpress:/var/www/html
       - ./php/php.ini:/usr/local/etc/php/php.ini:ro
       - ./php/log:/var/log/php
+    environment:
+      - WORDPRESS_DB_PASSWORD=PASSWORD
     links:
       - mysql:mysql
+    networks:
+      service-proxy:
+        aliases:
+          - wordpress1_fpm
 
   mysql:
     image: mysql:5.7.12
@@ -30,4 +43,15 @@ services:
     volumes:
       - ./mysql:/var/lib/mysql
     environment:
-      - MYSQL_ROOT_PASSWORD=your_password
+      - MYSQL_ROOT_PASSWORD=PASSWORD
+    networks:
+      service-proxy:
+        aliases:
+          - wordpress1_mysql
+
+
+networks:
+  service-proxy:
+    external:
+      name: service-proxy
+
