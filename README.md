@@ -18,6 +18,8 @@ Clone the repository or download zip and decompression.
 $ git clone https://github.com/KoetseJ/wordpress-nginx-mysql-compose-2.0.git
 ```
 
+Modify the docker-compose.yml file with your settings!
+
 ## Usage
 
 Before run, you can modify profiles with your parameters.
