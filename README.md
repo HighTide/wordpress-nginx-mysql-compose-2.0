@@ -3,6 +3,14 @@ Modified version of https://github.com/mzsea/docker-compose-wordpress-nginx
 
 Using docker compose to launch wordpress with nginx and php-fpm.
 ## Installation
+You need to have a docker running with:
+https://github.com/jwilder/nginx-proxy
+
+You need to add a docker proxy network to your nginx-proxy
+```bash
+$ docker network create service-proxy
+$ docker network connect service-proxy nginx-proxy
+```
 
 Clone the repository or download zip and decompression.
 
